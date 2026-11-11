@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Whys 로 파고드는 영어 독해와 문제 해결</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .step-active {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+        .step-active span:first-child {
+            background-color: #ffffff !important;
+            color: #2563eb !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- APP CONTAINER -->
+    <div id="app" class="flex-1 flex flex-col">
+
+        <!-- GLOBAL HEADER (Styled like teacher_guide.html) -->
+        <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center flex-wrap gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <span class="px-2.5 py-0.5 bg-amber-400 text-slate-950 font-black text-[10px] rounded uppercase tracking-wider">English PBL Workspace</span>
+                            <h1 class="text-lg sm:text-xl font-black tracking-tight text-white mt-0.5">5 Whys 로 파고드는 영어 독해와 문제 해결</h1>
+                        </div>
+                    </div>
+
+                    <!-- Mode Switcher & Group Info -->
+                    <div class="flex items-center space-x-3">
+                        <div id="studentHeaderInfo" class="hidden md:flex items-center space-x-2 bg-slate-800/80 px-3.5 py-1.5 rounded-xl border border-slate-700 text-xs">
+                            <span class="font-bold text-amber-300" id="headerTeamBadge">미지정 모둠</span>
+                            <span class="text-slate-600">|</span>
+                            <span class="text-slate-300" id="headerStudentBadge">학생 정보 입력 필요</span>
+                        </div>
+
+                        <!-- Real-time Sync Status Indicator -->
+                        <div id="syncStatusBadge" class="hidden sm:flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-xl text-xs font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>실시간 동기화</span>
+                        </div>
+
+                        <button id="btnSwitchView" onclick="toggleViewMode()" class="px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center space-x-2 bg-blue-600 text-white hover:bg-blue-700 shadow-md">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                            <span id="viewModeText">교사 모니터링 모드</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- STUDENT WORKSPACE VIEW -->
+        <main id="studentView" class="max-w-7xl mx-auto px-4 py-6 space-y-6 w-full">
+
+            <!-- STEP NAVIGATION BAR -->
+            <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+                <div class="flex space-x-2 min-w-max">
+                    <button id="stepBtn-1" onclick="goToStep(1)" class="step-btn step-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-black">1</span>
+                        <span>개요 & 팀구성</span>
+                    </button>
+                    <button id="stepBtn-2" onclick="goToStep(2)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">2</span>
+                        <span>팀 역할 정하기</span>
+                    </button>
+                    <button id="stepBtn-3" onclick="goToStep(3)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">3</span>
+                        <span>지문 읽기 & 문제 정의</span>
+                    </button>
+                    <button id="stepBtn-4" onclick="goToStep(4)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">4</span>
+                        <span>5 Whys 사다리</span>
+                    </button>
+                    <button id="stepBtn-5" onclick="goToStep(5)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">5</span>
+                        <span>점검 & 해결책</span>
+                    </button>
+                    <button id="stepBtn-6" onclick="goToStep(6)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">6</span>
+                        <span>모둠 발표문</span>
+                    </button>
+                    <button id="stepBtn-7" onclick="goToStep(7)" class="step-btn text-slate-600 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-[10px] font-black">7</span>
+                        <span>나의 성찰 & 제출</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 1 CONTENT -->
+            <section id="stepContent-1" class="space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center flex-wrap gap-2 border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-users text-blue-600 mr-2.5"></i> STEP 1. 기본 정보 및 5 Whys 개념 이해 (7분)
+                        </h2>
+                        <span id="assignedPassageBadge" class="px-3 py-1 bg-blue-100 text-blue-800 font-bold text-xs rounded-lg flex items-center space-x-1">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <span>팀을 선택해 주세요</span>
+                        </span>
+                    </div>
+
+                    <!-- Team Selection Inputs -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-800 mb-1">학년 / 반</label>
+                            <input type="text" id="inputGradeClass" placeholder="예: 3학년 2반" oninput="saveCurrentState()" class="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-800 mb-1">모둠 선택</label>
+                            <select id="selectTeamNum" onchange="onTeamSelectChange()" class="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white font-bold text-slate-800">
+                                <option value="Group 1">Group 1 (지문 A)</option>
+                                <option value="Group 2">Group 2 (지문 B)</option>
+                                <option value="Group 3">Group 3 (지문 C)</option>
+                                <option value="Group 4">Group 4 (지문 A)</option>
+                                <option value="Group 5">Group 5 (지문 B)</option>
+                                <option value="Group 6">Group 6 (지문 C)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-800 mb-1">모둠원 이름</label>
+                            <input type="text" id="inputStudentInfo" placeholder="예: 김철수, 이영희, 박지성" oninput="saveCurrentState()" class="w-full px-3.5 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        </div>
+                    </div>
+
+                    <!-- Concept Explanation -->
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl border border-slate-800 shadow-xl space-y-6">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2.5 py-1 bg-amber-400 text-slate-950 font-black text-xs rounded-md">Step-by-Step Guide</span>
+                            <h3 class="font-extrabold text-white text-base">5 Whys 질문 기법 완벽 이해하기</h3>
+                        </div>
+                        
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            어떤 문제가 생겼을 때 <strong>"Why?"를 다섯 번 이어서 물어</strong> 겉으로 보이는 이유가 아니라 심층적 <strong>근본 원인(Root Cause)</strong>을 찾는 질문 방법입니다. 도요타(Toyota) 자동차 회사의 생산 문제를 해결하기 위해 도입되었습니다.
+                        </p>
+
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-bold text-amber-300 text-xs flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg"></i>
+                            <span>핵심 규칙: 다음 Why 질문은 반드시 바로 앞 답변(Because~)의 핵심 내용을 바탕으로 이어 만들어야 합니다! (문제 → Why 1? → 답1 → Why 2? → 답2 ... → 근본 원인 → 해결책)</span>
+                        </div>
+
+                        <!-- 3 Rules -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                                <span class="font-bold text-blue-400 block mb-1">① 근거를 찾아요</span>
+                                <p class="text-slate-300">답을 할 때 지문의 몇 번째 문장에 근거가 있는지 표시합니다. 지문에 없으면 '추론(I)'으로 표시합니다.</p>
+                            </div>
+                            <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                                <span class="font-bold text-amber-400 block mb-1">② 사람 탓은 하지 않아요</span>
+                                <p class="text-slate-300">"Because they are lazy"처럼 사람 탓으로 끝내지 않고 습관, 생각, 구조, 규칙에서 원인을 찾습니다.</p>
+                            </div>
+                            <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                                <span class="font-bold text-emerald-400 block mb-1">③ 거꾸로 읽어 확인해요</span>
+                                <p class="text-slate-300">근본 원인 → Why 5 → ... → 문제 순서로 "그래서 (so)"를 넣었을 때 논리가 통하면 잘 만든 사다리입니다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Practice Example Table -->
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-200 text-xs text-amber-300"><i class="fa-solid fa-seedling mr-1"></i> 연습 예시: 우리 교실 화분이 자꾸 시들어요.</h4>
+                            <div class="overflow-x-auto rounded-xl border border-slate-700">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-slate-800 text-slate-300 font-bold border-b border-slate-700">
+                                        <tr>
+                                            <th class="p-2 text-center w-16">단계</th>
+                                            <th class="p-2">Why 질문</th>
+                                            <th class="p-2">답 (Because~)</th>
+                                            <th class="p-2">근거</th>
+                                            <th class="p-2 w-14 text-center">F/I</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-800 text-slate-300">
+                                        <tr>
+                                            <td class="p-2 font-bold text-blue-400 text-center">Why 1</td>
+                                            <td class="p-2">Why are the plants in our classroom dying?</td>
+                                            <td class="p-2">Because they don't get enough water.</td>
+                                            <td class="p-2">교실 관찰</td>
+                                            <td class="p-2 text-center font-bold text-emerald-400">F</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-bold text-blue-400 text-center">Why 2</td>
+                                            <td class="p-2">Why don't they get enough water?</td>
+                                            <td class="p-2">Because nobody waters them regularly.</td>
+                                            <td class="p-2">학급 회의 기록</td>
+                                            <td class="p-2 text-center font-bold text-emerald-400">F</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-bold text-blue-400 text-center">Why 3</td>
+                                            <td class="p-2">Why does nobody water them regularly?</td>
+                                            <td class="p-2">Because everyone thinks someone else will do it.</td>
+                                            <td class="p-2">학급 설문</td>
+                                            <td class="p-2 text-center font-bold text-emerald-400">F</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-bold text-blue-400 text-center">Why 4</td>
+                                            <td class="p-2">Why does everyone think someone else will do it?</td>
+                                            <td class="p-2">Because no one is in charge of the plants.</td>
+                                            <td class="p-2">학급 역할표</td>
+                                            <td class="p-2 text-center font-bold text-emerald-400">F</td>
+                                        </tr>
+                                        <tr class="bg-slate-800/50 font-medium">
+                                            <td class="p-2 font-bold text-amber-400 text-center">Why 5</td>
+                                            <td class="p-2">Why is no one in charge of the plants?</td>
+                                            <td class="p-2 text-amber-200">Because our class never made a plant-care duty chart.</td>
+                                            <td class="p-2">추론</td>
+                                            <td class="p-2 text-center font-bold text-amber-400">I</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Useful Expressions -->
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-200 text-xs text-indigo-300"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Useful Expressions (유용한 질문과 답 표현 틀)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700">
+                                    <span class="text-amber-300 font-bold block mb-1">[질문 틀]</span>
+                                    • Why do / does ~ ?<br>
+                                    • Why can't / couldn't ~ ?<br>
+                                    • What makes (동사원형) ~ ?<br>
+                                    • What caused ~ ?
+                                </div>
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700">
+                                    <span class="text-amber-300 font-bold block mb-1">[답변 & 해결책 틀]</span>
+                                    • Because ~<br>
+                                    • According to sentence [X], ~<br>
+                                    • So, the root cause is that ~<br>
+                                    • One way to solve this is to ~ / We suggest that ~
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 2 CONTENT -->
+            <section id="stepContent-2" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-user-gear text-indigo-600 mr-2.5"></i> STEP 2. 팀 역할 정하기 (3분)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-2 text-blue-700 font-extrabold text-sm">
+                                <i class="fa-solid fa-crown"></i>
+                                <span>Leader (진행자)</span>
+                            </div>
+                            <p class="text-xs text-slate-500">시간을 확인하고, 모든 팀원이 한 번씩 말하도록 순서를 정함</p>
+                            <input type="text" id="roleLeader" placeholder="담당 학생 이름" oninput="saveCurrentState()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-2 text-indigo-700 font-extrabold text-sm">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>Questioner (질문 다듬기)</span>
+                            </div>
+                            <p class="text-xs text-slate-500">Why 질문이 앞 답과 이어지는지, 올바른 영어 문장인지 확인</p>
+                            <input type="text" id="roleQuestioner" placeholder="담당 학생 이름" oninput="saveCurrentState()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-2 text-emerald-700 font-extrabold text-sm">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>Evidence Finder (근거 찾기)</span>
+                            </div>
+                            <p class="text-xs text-slate-500">답의 근거가 지문 몇 번 문장에 있는지 찾고 Fact/Inference 판단</p>
+                            <input type="text" id="roleFinder" placeholder="담당 학생 이름" oninput="saveCurrentState()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                            <div class="flex items-center space-x-2 text-amber-700 font-extrabold text-sm">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span>Recorder (기록자)</span>
+                            </div>
+                            <p class="text-xs text-slate-500">팀의 5 Whys 사다리와 해결책을 실시간으로 입력하여 정제</p>
+                            <input type="text" id="roleRecorder" placeholder="담당 학생 이름" oninput="saveCurrentState()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white">
+                        </div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 md:col-span-2 lg:col-span-1">
+                            <div class="flex items-center space-x-2 text-purple-700 font-extrabold text-sm">
+                                <i class="fa-solid fa-bullhorn"></i>
+                                <span>Reporter (발표자)</span>
+                            </div>
+                            <p class="text-xs text-slate-500">다른 팀에게 우리 팀의 도출 결과를 종합 발표</p>
+                            <input type="text" id="roleReporter" placeholder="담당 학생 이름" oninput="saveCurrentState()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3 CONTENT -->
+            <section id="stepContent-3" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 id="passageTitleText" class="text-xl font-extrabold text-slate-900">STEP 3. 지문 읽기 (15분)</h2>
+                        <span id="passageTagBadge" class="px-3 py-1 bg-indigo-100 text-indigo-800 font-bold text-xs rounded-lg">A팀</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Passage Sentences -->
+                        <div class="lg:col-span-2 space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200 font-mono text-xs sm:text-sm leading-relaxed text-slate-800 max-h-[420px] overflow-y-auto" id="passageTextContainer">
+                        </div>
+                        <!-- Vocabulary Helper -->
+                        <div class="bg-blue-50/60 p-5 rounded-2xl border border-blue-100 space-y-3 max-h-[420px] overflow-y-auto">
+                            <h3 class="font-bold text-blue-900 text-xs uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-spell-check mr-1.5"></i> 핵심 어휘
+                            </h3>
+                            <div id="vocabListContainer" class="space-y-2 text-xs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problem Definition Inputs -->
+                    <div class="space-y-4 pt-4 border-t border-slate-200">
+                        <h3 class="font-extrabold text-slate-900 text-base">문제 정의하기 (Define the Problem)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                                <label class="block text-xs font-bold text-slate-900">① 이 글은 어떤 문제를 다루나요? (우리말 한 문장)</label>
+                                <textarea id="inputProblemKorean" rows="2" placeholder="" oninput="saveCurrentState()" class="w-full p-3 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                                <label class="block text-xs font-bold text-slate-900">② 글쓴이가 말하는 요지 (영어 한 문장)</label>
+                                <textarea id="inputMainIdeaEnglish" rows="2" placeholder="" oninput="saveCurrentState()" class="w-full p-3 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white font-mono"></textarea>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-2">
+                            <label class="block text-xs font-bold text-amber-900">Problem Statement (영어 문제 정의 한 문장)</label>
+                            <input type="text" id="inputProblemStatement" placeholder="" oninput="saveCurrentState()" class="w-full p-3 text-xs border border-amber-300 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono font-bold text-slate-900">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 4 CONTENT -->
+            <section id="stepContent-4" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-network-wired text-blue-600 mr-2.5"></i> STEP 4. 우리 팀 5 Whys 사다리 (10분)
+                    </h2>
+
+                    <!-- Ladder Table -->
+                    <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 font-bold border-b border-slate-200 text-slate-800">
+                                <tr>
+                                    <th class="p-3 w-16 text-center">단계</th>
+                                    <th class="p-3 w-28">질문자</th>
+                                    <th class="p-3">Why 질문 (영어)</th>
+                                    <th class="p-3">답 (Because~) (영어)</th>
+                                    <th class="p-3 w-36">F/I 구분 & 문장번호</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ladderTableBody" class="divide-y divide-slate-200">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Root Cause Box -->
+                    <div class="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-3">
+                        <label class="block text-xs font-extrabold text-indigo-900">근본 원인 (Root Cause)</label>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold text-indigo-800 whitespace-nowrap">So, the root cause is that</span>
+                            <input type="text" id="inputRootCause" placeholder="" oninput="saveCurrentState()" class="w-full p-3 text-xs border border-indigo-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono font-bold bg-white text-slate-900">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 5 CONTENT -->
+            <section id="stepContent-5" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-list-check text-emerald-600 mr-2.5"></i> STEP 5. 근본 원인 점검 및 해결책 정하기 (10분)
+                    </h2>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h3 class="font-extrabold text-slate-800 text-xs uppercase tracking-wider">점검 체크리스트</h3>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk1" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>각 Why 질문이 바로 앞의 답과 긴밀하게 이어지나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk2" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>답마다 지문의 문장 번호나 추론(I) 표시가 명확히 명시되어 있나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk3" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>근본 원인이 사람 탓이 아니라 생각, 습관, 규칙, 구조에서 찾아졌나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk4" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>근본 원인에서 문제까지 거꾸로 'so'를 넣어 읽었을 때 논리가 통하나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk5" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>모든 팀원이 질문을 1개 이상 작성하였나요?</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Solution Inputs -->
+                    <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-200 space-y-3">
+                        <h3 class="font-extrabold text-indigo-900 text-sm">우리 팀의 해결책 (근본 원인을 없애는 방법)</h3>
+                        <div class="space-y-2">
+                            <input type="text" id="inputSolution1" placeholder="One way to solve this is to " oninput="saveCurrentState()" class="w-full p-3 text-xs border border-indigo-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono bg-white">
+                            <input type="text" id="inputSolution2" placeholder="We suggest that " oninput="saveCurrentState()" class="w-full p-3 text-xs border border-indigo-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono bg-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 6 CONTENT -->
+            <section id="stepContent-6" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-person-chalkboard text-purple-600 mr-2.5"></i> STEP 6. 모둠 발표문 대본 (25분 - 2차시)
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">1. The passage we read is about</label>
+                            <input type="text" id="scriptP1" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">2. The problem we found is that</label>
+                            <input type="text" id="scriptP2" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">3. By asking "why" 5 times, we found that the root cause is</label>
+                            <input type="text" id="scriptP3" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">4. To solve this problem, we suggest</label>
+                            <input type="text" id="scriptP4" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">5. This solution will work because</label>
+                            <input type="text" id="scriptP5" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">6. (Optional) One question we still have is</label>
+                            <input type="text" id="scriptP6" placeholder="" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 7 CONTENT -->
+            <section id="stepContent-7" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-heart-pulse text-rose-600 mr-2.5"></i> STEP 7. 나의 성찰 및 과제 제출 (3분)
+                    </h2>
+
+                    <div class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200 text-xs">
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk1" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 바로 앞의 답과 이어지는 Why 질문을 능동적으로 만들었다.</span>
+                        </label>
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk2" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 지문에서 정확한 근거 문장(또는 추론)을 찾아 답변했다.</span>
+                        </label>
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk3" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 모둠 활동에서 맡은 역할을 충실히 수행해냈다.</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-800">5 Whys 로 지문을 읽고 나서 새롭게 이해하게 된 점 (한두 문장)</label>
+                        <textarea id="reflectionText" rows="3" placeholder="" oninput="saveCurrentState()" class="w-full p-3.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                    </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 5 CONTENT -->
+            <section id="stepContent-5" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-list-check text-emerald-600 mr-2.5"></i> STEP 5. 근본 원인 점검 및 해결책 정하기 (10분)
+                    </h2>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h3 class="font-extrabold text-slate-800 text-xs uppercase tracking-wider">점검 체크리스트</h3>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk1" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>각 Why 질문이 바로 앞의 답과 긴밀하게 이어지나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk2" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>답마다 지문의 문장 번호나 추론(I) 표시가 명확히 명시되어 있나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk3" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>근본 원인이 사람 탓이 아니라 생각, 습관, 규칙, 구조에서 찾아졌나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk4" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>근본 원인에서 문제까지 거꾸로 'so'를 넣어 읽었을 때 논리가 통하나요?</span>
+                            </label>
+                            <label class="flex items-center space-x-2.5 cursor-pointer">
+                                <input type="checkbox" id="chk5" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span>모든 팀원이 질문을 1개 이상 작성하였나요?</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Solution Inputs -->
+                    <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-200 space-y-3">
+                        <h3 class="font-extrabold text-indigo-900 text-sm">우리 팀의 해결책 (근본 원인을 없애는 방법)</h3>
+                        <div class="space-y-2">
+                            <input type="text" id="inputSolution1" placeholder="One way to solve this is to set specific 45-minute notification-free focus blocks." oninput="saveCurrentState()" class="w-full p-3 text-xs border border-indigo-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono bg-white">
+                            <input type="text" id="inputSolution2" placeholder="We suggest that students should disable pop-up alerts before starting tasks." oninput="saveCurrentState()" class="w-full p-3 text-xs border border-indigo-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono bg-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 6 CONTENT -->
+            <section id="stepContent-6" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-person-chalkboard text-purple-600 mr-2.5"></i> STEP 6. 모둠 발표문 대본 (25분 - 2차시)
+                        </h2>
+                        <button onclick="generateScriptFromData()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center space-x-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>이전 작성 내용 자동 반영</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">1. The passage we read is about</label>
+                            <input type="text" id="scriptP1" placeholder="digital notifications and focus" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">2. The problem we found is that</label>
+                            <input type="text" id="scriptP2" placeholder="constant notifications make it hard to focus" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">3. By asking "why" 5 times, we found that the root cause is</label>
+                            <input type="text" id="scriptP3" placeholder="people lack structured focus habits and boundaries" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">4. To solve this problem, we suggest</label>
+                            <input type="text" id="scriptP4" placeholder="setting 45-minute focus blocks without notifications" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">5. This solution will work because</label>
+                            <input type="text" id="scriptP5" placeholder="it reduces distractions and allows strategic stillness" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">6. (Optional) One question we still have is</label>
+                            <input type="text" id="scriptP6" placeholder="how can we apply this habit during class time?" oninput="saveCurrentState()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 7 CONTENT -->
+            <section id="stepContent-7" class="space-y-6 hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-extrabold text-slate-900 border-b border-slate-200 pb-4 flex items-center">
+                        <i class="fa-solid fa-heart-pulse text-rose-600 mr-2.5"></i> STEP 7. 나의 성찰 및 과제 제출 (3분)
+                    </h2>
+
+                    <div class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200 text-xs">
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk1" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 바로 앞의 답과 이어지는 Why 질문을 능동적으로 만들었다.</span>
+                        </label>
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk2" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 지문에서 정확한 근거 문장(또는 추론)을 찾아 답변했다.</span>
+                        </label>
+                        <label class="flex items-center space-x-2.5 cursor-pointer">
+                            <input type="checkbox" id="selfChk3" onchange="saveCurrentState()" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span>나는 모둠 활동에서 맡은 역할을 충실히 수행해냈다.</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-800">5 Whys 로 지문을 읽고 나서 새롭게 이해하게 된 점 (한두 문장)</label>
+                        <textarea id="reflectionText" rows="3" placeholder="예: 단순히 집중력이 부족한 줄 알았는데, 구조적인 습관과 알림 차단 환경을 만들지 않은 것이 근본 원인임을 깨달았다." oninput="saveCurrentState()" class="w-full p-3.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button onclick="submitFinalTask()" class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm rounded-2xl shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> 최종 과제 제출하기
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- TEACHER MONITORING DASHBOARD -->
+        <main id="teacherView" class="max-w-7xl mx-auto px-4 py-6 space-y-6 w-full hidden">
+            <!-- Metrics Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 font-bold block">제출 완료</span>
+                        <span id="statSubmittedCount" class="text-xl font-black text-slate-900">0개 모둠</span>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-xl">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 font-bold block">작성 중</span>
+                        <span id="statInProgressCount" class="text-xl font-black text-slate-900">6개 모둠</span>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3.5 col-span-2 sm:col-span-1">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-xl">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 font-bold block">평균 진행 단계</span>
+                        <span id="statAvgStep" class="text-xl font-black text-slate-900">STEP 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group Grid Cards -->
+            <div id="teacherGroupGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            </div>
+        </main>
+
+        <!-- GROUP DETAIL & FEEDBACK MODAL -->
+        <div id="groupDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6">
+                <div class="flex justify-between items-start border-b border-slate-200 pb-4">
+                    <div>
+                        <span id="modalGroupBadge" class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-lg font-bold text-xs">Group 1</span>
+                        <h3 id="modalGroupTitle" class="text-xl font-extrabold text-slate-900 mt-1">모둠 과제 상세 검토</h3>
+                    </div>
+                    <button onclick="closeGroupModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold px-2">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div id="modalGroupBody" class="space-y-4">
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 space-y-3">
+                    <label class="block text-xs font-extrabold text-slate-800">교사 피드백 작성</label>
+                    <textarea id="teacherFeedbackInput" rows="3" placeholder="해당 모둠에 전할 피드백을 적어주세요." class="w-full p-3.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                    <div class="flex justify-end space-x-2">
+                        <button onclick="closeGroupModal()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200">닫기</button>
+                        <button onclick="saveTeacherFeedback()" class="px-4 py-2 bg-blue-600 text-white font-bold text-xs rounded-xl hover:bg-blue-700 shadow-sm">피드백 저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl border border-slate-700 hidden flex items-center space-x-3 transition-all duration-300">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage" class="text-sm font-medium">저장 되었습니다.</span>
+    </div>
+
+    <!-- FIREBASE MODULES & SCRIPT LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : '5whys-pbl-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyDummyKeyForDemoPurposesOnly",
+                authDomain: "pbl-5whys.firebaseapp.com",
+                projectId: "pbl-5whys",
+                storageBucket: "pbl-5whys.appspot.com",
+                messagingSenderId: "1234567890",
+                appId: "1:1234567890:web:abcdef123456"
+            };
+
+        let app, db, auth, currentUser = null;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch(e) {
+            console.log("Firebase initialized in fallback mode:", e);
+        }
+
+        // Global state variables
+        window.db = db;
+        window.appId = appId;
+        window.auth = auth;
+
+        // Authenticate user
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.warn("Auth initialization error, using local fallback mode:", err);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                console.log("Authenticated as:", user.uid);
+                listenToFirestore();
+            }
+        });
+
+        initAuth();
+
+        // Listen for Firestore real-time updates across all groups
+        function listenToFirestore() {
+            if (!db) return;
+            const groupsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'groups');
+
+            onSnapshot(groupsColRef, (snapshot) => {
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data && data.groupKey) {
+                        window.groupsStore[data.groupKey] = data;
+                    }
+                });
+
+                if (window.currentViewMode === 'teacher') {
+                    window.renderTeacherDashboard();
+                } else {
+                    window.loadGroupDataToUI(window.selectedGroupKey);
+                }
+            }, (err) => {
+                console.warn("Firestore snapshot error:", err);
+            });
+        }
+
+        // Save active state to Firestore
+        window.saveStoreToFirestore = async function(groupKey) {
+            if (!db || !auth || !auth.currentUser) {
+                localStorage.setItem('pbl_5whys_groups_blank_store', JSON.stringify(window.groupsStore));
+                return;
+            }
+
+            try {
+                const groupData = window.groupsStore[groupKey];
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'groups', groupKey);
+                await setDoc(docRef, groupData, { merge: true });
+            } catch (err) {
+                console.error("Error saving to Firestore:", err);
+            }
+        };
+    </script>
+
+    <script>
+        const PASSAGE_DATA = {
+            'A': {
+                title: '지문 A (G1 & G4) | 21번 지문',
+                tag: 'A팀 (G1 & G4)',
+                sentences: [
+                    "[1] These days, we get many notifications - buzzes, pop-ups, and messages that pull our attention in different directions.",
+                    "[2] Technology is supposed to help us stay connected and make life easier.",
+                    "[3] But often, it just makes it hard to maintain focus.",
+                    "[4] Studies show that most people switch tasks many times every hour.",
+                    "[5] They often don't finish one thing before starting another.",
+                    "[6] We skim through messages, move between apps, and confuse motion with meaning, assuming that being busy equals being productive.",
+                    "[7] Some experts argue that this is simply \"a performance of urgency.\"",
+                    "[8] In this constant rush, our minds rarely get the space to engage deeply with anything.",
+                    "[9] We forget that stillness can be strategic, and that stopping may help us think more clearly.",
+                    "[10] Sometimes, taking a break leads to better insight.",
+                    "[11] Being truly effective is not about speed, but about how well we focus.",
+                    "[12] Just because we are moving doesn't mean we are going somewhere important."
+                ],
+                vocab: [
+                    { word: 'notification', mean: '알림' },
+                    { word: 'pull one\'s attention', mean: '주의를 끌어당기다' },
+                    { word: 'maintain focus', mean: '집중을 유지하다' },
+                    { word: 'switch tasks', mean: '하던 일을 바꾸다' },
+                    { word: 'skim through', mean: '대충 훑어보다' },
+                    { word: 'productive', mean: '생산적인' },
+                    { word: 'urgency', mean: '다급함, 긴급함' },
+                    { word: 'engage deeply with', mean: '~에 깊이 몰두하다' },
+                    { word: 'stillness', mean: '멈춤, 고요함' },
+                    { word: 'strategic', mean: '전략적인' },
+                    { word: 'insight', mean: '통찰, 깨달음' },
+                    { word: 'effective', mean: '효과적인, 유능한' }
+                ]
+            },
+            'B': {
+                title: '지문 B (G2 & G5) | 33번 지문',
+                tag: 'B팀 (G2 & G5)',
+                sentences: [
+                    "[1] Excessive homework interferes with extra-curricular activities, which are just as important as academic studies.",
+                    "[2] Many children today are involved in sports, hobbies, and music lessons.",
+                    "[3] After-school assignments make it difficult for kids to engage in these activities, which teach valuable life skills that are just as important as formal academic knowledge.",
+                    "[4] Children also need time just to be kids.",
+                    "[5] They need to play with their friends and have leisure time with their families in order to grow into a whole person.",
+                    "[6] That's why the school districts adopted a policy requiring school personnel to coordinate assignments so that students do not have to devote their entire evening to homework."
+                ],
+                vocab: [
+                    { word: 'excessive', mean: '지나친, 과도한' },
+                    { word: 'interfere with', mean: '~을 방해하다' },
+                    { word: 'extra-curricular activities', mean: '교과 외 활동' },
+                    { word: 'academic studies', mean: '학업' },
+                    { word: 'assignment', mean: '과제' },
+                    { word: 'engage in', mean: '~에 참여하다' },
+                    { word: 'life skills', mean: '생활 기술' },
+                    { word: 'formal', mean: '형식적인, 정규의' },
+                    { word: 'leisure time', mean: '여가 시간' },
+                    { word: 'a whole person', mean: '전인적인 사람' },
+                    { word: 'school district', mean: '학군' },
+                    { word: 'coordinate', mean: '조정하다' }
+                ]
+            },
+            'C': {
+                title: '지문 C (G3 & G6) | 36번 지문',
+                tag: 'C팀 (G3 & G6)',
+                sentences: [
+                    "[1] Many people believe that eating well means eliminating all 'bad' foods completely from their daily diet.",
+                    "[2] They create rigid rules about what they can and cannot eat.",
+                    "[3] However, this overly restrictive approach often backfires in the long run.",
+                    "[4] When individuals completely forbid certain foods, feelings of intense deprivation build up.",
+                    "[5] This sense of deprivation frequently leads to episodes of uncontrolled overeating later on.",
+                    "[6] In contrast, having a healthy relationship with food involves flexibility and moderation.",
+                    "[7] Allowing yourself occasional treats without guilt promotes psychological well-being.",
+                    "[8] Sustainable healthy habits are built on nourishing the body while practicing self-compassion, rather than punishment and restriction."
+                ],
+                vocab: [
+                    { word: 'eliminate', mean: '없애다, 제거하다' },
+                    { word: 'backfire', mean: '역효과를 낳다' },
+                    { word: 'restrictive', mean: '제한하는, 엄격한' },
+                    { word: 'deprivation', mean: '결핍감, 박탈감' },
+                    { word: 'overeating', mean: '과식' },
+                    { word: 'punishment', mean: '벌' },
+                    { word: 'moderation', mean: '적당함, 절제' },
+                    { word: 'sustainability', mean: '지속 가능성' },
+                    { word: 'well-being', mean: '건강, 행복' },
+                    { word: 'occasional treat', mean: '가끔 먹는 간식' },
+                    { word: 'permission', mean: '허락' },
+                    { word: 'self-compassion', mean: '자기 자신에게 너그러움' }
+                ]
+            }
+        };
+
+        var currentViewMode = 'student';
+        var currentStep = 1;
+        var selectedGroupKey = 'Group 1';
+        var groupsStore = {};
+
+        function initStore() {
+            const saved = localStorage.getItem('pbl_5whys_groups_blank_store');
+            if (saved) {
+                try {
+                    groupsStore = JSON.parse(saved);
+                } catch(e) {
+                    createBlankStore();
+                }
+            } else {
+                createBlankStore();
+            }
+        }
+
+        function createBlankStore() {
+            groupsStore = {};
+            const teamPassageMap = {
+                'Group 1': 'A', 'Group 2': 'B', 'Group 3': 'C',
+                'Group 4': 'A', 'Group 5': 'B', 'Group 6': 'C'
+            };
+
+            for (let i = 1; i <= 6; i++) {
+                const key = `Group ${i}`;
+                groupsStore[key] = {
+                    groupKey: key,
+                    gradeClass: '',
+                    studentInfo: '',
+                    passageKey: teamPassageMap[key],
+                    currentStep: 1,
+                    isSubmitted: false,
+                    updatedAt: '미수정',
+                    roles: { leader: '', questioner: '', finder: '', recorder: '', reporter: '' },
+                    step3: { problemKorean: '', mainIdeaEnglish: '', problemStatement: '' },
+                    ladder: [
+                        { step: 1, questioner: '', question: '', answer: '', type: 'F', sentenceNum: '' },
+                        { step: 2, questioner: '', question: '', answer: '', type: 'F', sentenceNum: '' },
+                        { step: 3, questioner: '', question: '', answer: '', type: 'F', sentenceNum: '' },
+                        { step: 4, questioner: '', question: '', answer: '', type: 'F', sentenceNum: '' },
+                        { step: 5, questioner: '', question: '', answer: '', type: 'I', sentenceNum: '' }
+                    ],
+                    rootCause: '',
+                    step5: {
+                        chk1: false, chk2: false, chk3: false, chk4: false, chk5: false,
+                        solution1: '', solution2: ''
+                    },
+                    script: { p1: '', p2: '', p3: '', p4: '', p5: '', p6: '' },
+                    step7: {
+                        selfChk1: false, selfChk2: false, selfChk3: false, reflectionText: ''
+                    },
+                    teacherFeedback: ''
+                };
+            }
+            saveStoreToLocal();
+        }
+
+        function saveStoreToLocal() {
+            localStorage.setItem('pbl_5whys_groups_blank_store', JSON.stringify(groupsStore));
+            if (window.saveStoreToFirestore) {
+                window.saveStoreToFirestore(selectedGroupKey);
+            }
+        }
+
+        window.onload = function() {
+            initStore();
+            setupLadderRows();
+            loadGroupDataToUI(selectedGroupKey);
+            updateHeaderBadges();
+        };
+
+        function onTeamSelectChange() {
+            selectedGroupKey = document.getElementById('selectTeamNum').value;
+            loadGroupDataToUI(selectedGroupKey);
+            updateHeaderBadges();
+            showToast(`${selectedGroupKey} 정보가 로드되었습니다.`);
+        }
+
+        function updateHeaderBadges() {
+            const data = groupsStore[selectedGroupKey];
+            document.getElementById('headerTeamBadge').textContent = `${data.groupKey} (${data.passageKey}지문)`;
+            document.getElementById('headerStudentBadge').textContent = data.studentInfo || '학생 정보 미입력';
+
+            const badge = document.getElementById('assignedPassageBadge');
+            badge.innerHTML = `<i class="fa-solid fa-book-bookmark"></i> <span>지문 ${data.passageKey} (${data.groupKey})</span>`;
+        }
+
+        function loadGroupDataToUI(groupKey) {
+            const data = groupsStore[groupKey];
+            if (!data) return;
+
+            document.getElementById('inputGradeClass').value = data.gradeClass || '';
+            document.getElementById('selectTeamNum').value = groupKey;
+            document.getElementById('inputStudentInfo').value = data.studentInfo || '';
+
+            document.getElementById('roleLeader').value = data.roles.leader || '';
+            document.getElementById('roleQuestioner').value = data.roles.questioner || '';
+            document.getElementById('roleFinder').value = data.roles.finder || '';
+            document.getElementById('roleRecorder').value = data.roles.recorder || '';
+            document.getElementById('roleReporter').value = data.roles.reporter || '';
+
+            renderPassageUI(data.passageKey);
+            document.getElementById('inputProblemKorean').value = data.step3.problemKorean || '';
+            document.getElementById('inputMainIdeaEnglish').value = data.step3.mainIdeaEnglish || '';
+            document.getElementById('inputProblemStatement').value = data.step3.problemStatement || '';
+
+            for (let i = 0; i < 5; i++) {
+                const row = data.ladder[i];
+                if (row) {
+                    document.getElementById(`ladderQUser_${i}`).value = row.questioner || '';
+                    document.getElementById(`ladderQ_${i}`).value = row.question || '';
+                    document.getElementById(`ladderA_${i}`).value = row.answer || '';
+                    document.getElementById(`ladderType_${i}`).value = row.type || 'F';
+                    document.getElementById(`ladderNum_${i}`).value = row.sentenceNum || '';
+                }
+            }
+            document.getElementById('inputRootCause').value = data.rootCause || '';
+
+            document.getElementById('chk1').checked = data.step5.chk1 || false;
+            document.getElementById('chk2').checked = data.step5.chk2 || false;
+            document.getElementById('chk3').checked = data.step5.chk3 || false;
+            document.getElementById('chk4').checked = data.step5.chk4 || false;
+            document.getElementById('chk5').checked = data.step5.chk5 || false;
+            document.getElementById('inputSolution1').value = data.step5.solution1 || '';
+            document.getElementById('inputSolution2').value = data.step5.solution2 || '';
+
+            document.getElementById('scriptP1').value = data.script.p1 || '';
+            document.getElementById('scriptP2').value = data.script.p2 || '';
+            document.getElementById('scriptP3').value = data.script.p3 || '';
+            document.getElementById('scriptP4').value = data.script.p4 || '';
+            document.getElementById('scriptP5').value = data.script.p5 || '';
+            document.getElementById('scriptP6').value = data.script.p6 || '';
+
+            document.getElementById('selfChk1').checked = data.step7.selfChk1 || false;
+            document.getElementById('selfChk2').checked = data.step7.selfChk2 || false;
+            document.getElementById('selfChk3').checked = data.step7.selfChk3 || false;
+            document.getElementById('reflectionText').value = data.step7.reflectionText || '';
+        }
+
+        function saveCurrentState() {
+            if (!groupsStore[selectedGroupKey]) return;
+
+            const data = groupsStore[selectedGroupKey];
+            data.gradeClass = document.getElementById('inputGradeClass').value;
+            data.studentInfo = document.getElementById('inputStudentInfo').value;
+            data.currentStep = currentStep;
+            data.updatedAt = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
+            data.roles.leader = document.getElementById('roleLeader').value;
+            data.roles.questioner = document.getElementById('roleQuestioner').value;
+            data.roles.finder = document.getElementById('roleFinder').value;
+            data.roles.recorder = document.getElementById('roleRecorder').value;
+            data.roles.reporter = document.getElementById('roleReporter').value;
+
+            data.step3.problemKorean = document.getElementById('inputProblemKorean').value;
+            data.step3.mainIdeaEnglish = document.getElementById('inputMainIdeaEnglish').value;
+            data.step3.problemStatement = document.getElementById('inputProblemStatement').value;
+
+            for (let i = 0; i < 5; i++) {
+                data.ladder[i] = {
+                    step: i + 1,
+                    questioner: document.getElementById(`ladderQUser_${i}`).value,
+                    question: document.getElementById(`ladderQ_${i}`).value,
+                    answer: document.getElementById(`ladderA_${i}`).value,
+                    type: document.getElementById(`ladderType_${i}`).value,
+                    sentenceNum: document.getElementById(`ladderNum_${i}`).value
+                };
+            }
+            data.rootCause = document.getElementById('inputRootCause').value;
+
+            data.step5 = {
+                chk1: document.getElementById('chk1').checked,
+                chk2: document.getElementById('chk2').checked,
+                chk3: document.getElementById('chk3').checked,
+                chk4: document.getElementById('chk4').checked,
+                chk5: document.getElementById('chk5').checked,
+                solution1: document.getElementById('inputSolution1').value,
+                solution2: document.getElementById('inputSolution2').value
+            };
+
+            data.script = {
+                p1: document.getElementById('scriptP1').value,
+                p2: document.getElementById('scriptP2').value,
+                p3: document.getElementById('scriptP3').value,
+                p4: document.getElementById('scriptP4').value,
+                p5: document.getElementById('scriptP5').value,
+                p6: document.getElementById('scriptP6').value
+            };
+
+            data.step7 = {
+                selfChk1: document.getElementById('selfChk1').checked,
+                selfChk2: document.getElementById('selfChk2').checked,
+                selfChk3: document.getElementById('selfChk3').checked,
+                reflectionText: document.getElementById('reflectionText').value
+            };
+
+            saveStoreToLocal();
+            updateHeaderBadges();
+        }
+
+        function renderPassageUI(passageKey) {
+            const passage = PASSAGE_DATA[passageKey];
+            if (!passage) return;
+
+            document.getElementById('passageTitleText').innerHTML = `<i class="fa-solid fa-book-open text-blue-600 mr-2"></i> STEP 3. 지문 읽기 (15분) - ${passage.title}`;
+            document.getElementById('passageTagBadge').textContent = passage.tag;
+
+            const textContainer = document.getElementById('passageTextContainer');
+            textContainer.innerHTML = passage.sentences.map(s => {
+                return `<p class="p-2 rounded hover:bg-amber-100/60 transition-colors cursor-pointer border-l-2 border-transparent hover:border-amber-400" onclick="highlightSentence(this)">${s}</p>`;
+            }).join('');
+
+            const vocabContainer = document.getElementById('vocabListContainer');
+            vocabContainer.innerHTML = passage.vocab.map(v => {
+                return `<div class="flex justify-between items-center bg-white p-2 rounded-lg border border-blue-100 font-medium">
+                    <span class="font-bold text-blue-900">${v.word}</span>
+                    <span class="text-slate-600">${v.mean}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function highlightSentence(el) {
+            el.classList.toggle('bg-amber-100');
+            el.classList.toggle('border-amber-500');
+        }
+
+        function setupLadderRows() {
+            const tbody = document.getElementById('ladderTableBody');
+            tbody.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const tr = document.createElement('tr');
+                tr.className = i % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
+                tr.innerHTML = `
+                    <td class="p-3 text-center font-black text-blue-600">Why ${i + 1}</td>
+                    <td class="p-3">
+                        <input type="text" id="ladderQUser_${i}" placeholder="질문자 이름" oninput="saveCurrentState()" class="w-full px-2 py-1.5 text-xs border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+                    </td>
+                    <td class="p-3">
+                        <input type="text" id="ladderQ_${i}" placeholder="Why ~ ?" oninput="saveCurrentState()" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+                    </td>
+                    <td class="p-3">
+                        <input type="text" id="ladderA_${i}" placeholder="Because ~" oninput="saveCurrentState()" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+                    </td>
+                    <td class="p-3">
+                        <div class="flex items-center space-x-1">
+                            <select id="ladderType_${i}" onchange="saveCurrentState()" class="px-1.5 py-1 text-xs border border-slate-300 rounded bg-white font-bold text-slate-700">
+                                <option value="F">F (사실)</option>
+                                <option value="I">I (추론)</option>
+                            </select>
+                            <input type="text" id="ladderNum_${i}" placeholder="예: [3]" oninput="saveCurrentState()" class="w-16 px-1.5 py-1 text-xs border border-slate-300 rounded text-center bg-white">
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function generateScriptFromData() {
+            saveCurrentState();
+            const data = groupsStore[selectedGroupKey];
+
+            if (data.step3.mainIdeaEnglish) document.getElementById('scriptP1').value = data.step3.mainIdeaEnglish;
+            if (data.step3.problemStatement) document.getElementById('scriptP2').value = data.step3.problemStatement;
+            if (data.rootCause) document.getElementById('scriptP3').value = data.rootCause;
+            if (data.step5.solution1) document.getElementById('scriptP4').value = data.step5.solution1;
+
+            saveCurrentState();
+            showToast('작성된 데이터가 발표 대본에 반영되었습니다.');
+        }
+
+        function submitFinalTask() {
+            saveCurrentState();
+            groupsStore[selectedGroupKey].isSubmitted = true;
+            saveStoreToLocal();
+            showToast('🎉 선생님께 성공적으로 제출되었습니다!');
+        }
+
+        function goToStep(stepNum) {
+            saveCurrentState();
+            currentStep = stepNum;
+
+            for (let i = 1; i <= 7; i++) {
+                const content = document.getElementById(`stepContent-${i}`);
+                const btn = document.getElementById(`stepBtn-${i}`);
+                if (content) content.classList.add('hidden');
+                if (btn) {
+                    btn.classList.remove('step-active');
+                    btn.classList.add('text-slate-600');
+                }
+            }
+
+            const activeContent = document.getElementById(`stepContent-${stepNum}`);
+            const activeBtn = document.getElementById(`stepBtn-${stepNum}`);
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.classList.add('step-active');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleViewMode() {
+            saveCurrentState();
+            if (currentViewMode === 'student') {
+                currentViewMode = 'teacher';
+                document.getElementById('studentView').classList.add('hidden');
+                document.getElementById('teacherView').classList.remove('hidden');
+                document.getElementById('viewModeText').textContent = '학생 활동 모드 전환';
+                renderTeacherDashboard();
+            } else {
+                currentViewMode = 'student';
+                document.getElementById('teacherView').classList.add('hidden');
+                document.getElementById('studentView').classList.remove('hidden');
+                document.getElementById('viewModeText').textContent = '교사 모니터링 모드';
+            }
+        }
+
+        function renderTeacherDashboard() {
+            const grid = document.getElementById('teacherGroupGrid');
+            grid.innerHTML = '';
+
+            let submittedCount = 0;
+            let totalSteps = 0;
+
+            Object.keys(groupsStore).forEach(key => {
+                const g = groupsStore[key];
+                if (g.isSubmitted) submittedCount++;
+                totalSteps += g.currentStep;
+
+                const isDone = g.isSubmitted;
+                const statusBadge = isDone 
+                    ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full font-bold text-xs"><i class="fa-solid fa-check mr-1"></i>제출 완료</span>`
+                    : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-bold text-xs"><i class="fa-solid fa-spinner fa-spin mr-1"></i>작성 중 (STEP ${g.currentStep})</span>`;
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-5 flex flex-col justify-between space-y-4';
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                            <div>
+                                <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">지문 ${g.passageKey}</span>
+                                <h4 class="text-lg font-extrabold text-slate-800">${g.groupKey}</h4>
+                                <p class="text-xs text-slate-500">${g.gradeClass || '학반 미입력'} | ${g.studentInfo || '작성자 미지정'}</p>
+                            </div>
+                            ${statusBadge}
+                        </div>
+
+                        <div class="text-xs space-y-1 text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            <div class="flex justify-between">
+                                <span class="font-bold text-slate-700">진행자(Leader):</span>
+                                <span>${g.roles.leader || '미정'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-bold text-slate-700">근본 원인(Root Cause):</span>
+                                <span class="font-semibold text-blue-700 truncate max-w-[150px]">${g.rootCause || '미작성'}</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-500 mb-1 font-semibold">
+                                <span>진행 단계</span>
+                                <span>STEP ${g.currentStep} / 7</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div class="bg-blue-600 h-full rounded-full transition-all" style="width: ${(g.currentStep / 7) * 100}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-[11px] text-slate-400">수정: ${g.updatedAt}</span>
+                        <button onclick="openGroupModal('${g.groupKey}')" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center space-x-1">
+                            <span>상세 및 피드백</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('statSubmittedCount').textContent = `${submittedCount}개 모둠`;
+            document.getElementById('statInProgressCount').textContent = `${6 - submittedCount}개 모둠`;
+            document.getElementById('statAvgStep').textContent = `STEP ${Math.round(totalSteps / 6)}`;
+        }
+
+        var currentModalGroupKey = null;
+
+        function openGroupModal(groupKey) {
+            currentModalGroupKey = groupKey;
+            const g = groupsStore[groupKey];
+            if (!g) return;
+
+            document.getElementById('modalGroupBadge').textContent = `${g.groupKey} (지문 ${g.passageKey})`;
+            document.getElementById('modalGroupTitle').textContent = `${g.gradeClass || '학반 미입력'} - 작성자: ${g.studentInfo || '미입력'}`;
+            document.getElementById('teacherFeedbackInput').value = g.teacherFeedback || '';
+
+            const body = document.getElementById('modalGroupBody');
+            body.innerHTML = `
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h5 class="font-bold text-slate-800 text-xs mb-2 text-blue-600 uppercase">1. 모둠 역할 구성</h5>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div><strong>Leader:</strong> ${g.roles.leader || '-'}</div>
+                        <div><strong>Questioner:</strong> ${g.roles.questioner || '-'}</div>
+                        <div><strong>Finder:</strong> ${g.roles.finder || '-'}</div>
+                        <div><strong>Recorder:</strong> ${g.roles.recorder || '-'}</div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200">
+                    <h5 class="font-bold text-amber-900 text-xs mb-2">2. 문제 정의 (Problem Statement)</h5>
+                    <p class="text-xs font-mono text-slate-800">${g.step3.problemStatement || '미작성'}</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h5 class="font-bold text-slate-800 text-xs">3. 5 Whys 사다리 검토</h5>
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-2">단계</th>
+                                    <th class="p-2">질문자</th>
+                                    <th class="p-2">Why 질문</th>
+                                    <th class="p-2">답변 (Because~)</th>
+                                    <th class="p-2">F/I</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${g.ladder.map(l => `
+                                    <tr>
+                                        <td class="p-2 font-bold text-blue-600">Why ${l.step}</td>
+                                        <td class="p-2">${l.questioner || '-'}</td>
+                                        <td class="p-2 font-medium">${l.question || '-'}</td>
+                                        <td class="p-2 font-medium">${l.answer || '-'}</td>
+                                        <td class="p-2 font-bold">${l.type} [${l.sentenceNum || '-'}]</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 space-y-2">
+                    <h5 class="font-bold text-indigo-900 text-xs">4. 근본 원인 & 영어 해결책</h5>
+                    <p class="text-xs"><strong>Root Cause:</strong> So, the root cause is that ${g.rootCause || '미작성'}</p>
+                    <p class="text-xs"><strong>Solution 1:</strong> ${g.step5.solution1 || '미작성'}</p>
+                    <p class="text-xs"><strong>Solution 2:</strong> ${g.step5.solution2 || '미작성'}</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200">
+                    <h5 class="font-bold text-slate-800 text-xs mb-2">5. 발표 대본 (Presentation Script)</h5>
+                    <p class="text-xs font-mono text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        1. The passage we read is about ${g.script.p1 || '___'}.<br>
+                        2. The problem we found is that ${g.script.p2 || '___'}.<br>
+                        3. By asking "why" five times, we found that the root cause is ${g.script.p3 || '___'}.<br>
+                        4. To solve this problem, we suggest ${g.script.p4 || '___'}.<br>
+                        5. This solution will work because ${g.script.p5 || '___'}.
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('groupDetailModal').classList.remove('hidden');
+        }
+
+        function closeGroupModal() {
+            document.getElementById('groupDetailModal').classList.add('hidden');
+        }
+
+        function saveTeacherFeedback() {
+            if (!currentModalGroupKey) return;
+            const fb = document.getElementById('teacherFeedbackInput').value;
+            groupsStore[currentModalGroupKey].teacherFeedback = fb;
+            saveStoreToLocal();
+            showToast('교사 피드백이 저장되었습니다.');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
